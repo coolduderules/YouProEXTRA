@@ -45,6 +45,12 @@ on:
         required: false
         type: boolean
 
+      yticonswitcher:
+        description: "Integrate YTIconSwitcher"
+        default: true
+        required: false
+        type: boolean
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -58,6 +64,7 @@ jobs:
       demc: ${{ inputs.demc }}
       ytvid: ${{ inputs.ytvid }}
       ythold: ${{ inputs.ythold }}
+      yticonswitcher: ${{ inputs.yticonswitcher }}
       
   package:
     name: Package IPA
@@ -76,7 +83,7 @@ jobs:
       - name: Hide Sensitive Inputs
         uses: levibostian/action-hide-sensitive-inputs@v1
         with:
-          exclude_inputs: bundle_id,display_name,demc,ytvid,isponsorblock,ythold
+          exclude_inputs: bundle_id,display_name,demc,ytvid,isponsorblock,ythold,yticonswitcher
 
       - name: Download and Validate IPA
         run: |

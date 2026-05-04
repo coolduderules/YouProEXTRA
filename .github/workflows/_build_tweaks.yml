@@ -26,7 +26,11 @@ on:
       volumeboost:
         type: boolean
         required: false
-        default: false  
+        default: false
+      yticonswitcher:
+        type: boolean
+        required: false
+        default: true
 
 jobs:
   build-tweaks:
@@ -54,6 +58,7 @@ jobs:
           ytvid: ${{ inputs.ytvid }}
           ythold: ${{ inputs.ythold }}
           volumeboost: ${{ inputs.volumeboost }}
+          yticonswitcher: ${{ inputs.yticonswitcher }}
 
       - name: Cache Theos
         id: theos
@@ -111,6 +116,7 @@ jobs:
           ytvid: ${{ inputs.ytvid }}
           ythold: ${{ inputs.ythold }}
           volumeboost: ${{ inputs.volumeboost }}
+          yticonswitcher: ${{ inputs.yticonswitcher }}
           theos_commit: ${{ steps.commit_hashes.outputs.theos }}
           youpip_commit: ${{ steps.commit_hashes.outputs.youpip }}
           ytuhd_commit: ${{ steps.commit_hashes.outputs.ytuhd }}
@@ -136,6 +142,7 @@ jobs:
           ytvid_commit: ${{ steps.commit_hashes.outputs.ytvid }}
           ythold_commit: ${{ steps.commit_hashes.outputs.ythold }}
           volumeboost_commit: ${{ steps.commit_hashes.outputs.volumeboost }}
+          yticonswitcher_commit: ${{ steps.commit_hashes.outputs.yticonswitcher }}
 
       - name: Build YTVideoOverlay
         if: steps.cache_tweaks.outputs.cache_ytvo_hit != 'true'
@@ -312,6 +319,13 @@ jobs:
           git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
           cd VolumeBoostYT && make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
           mv packages/*.deb ${{ github.workspace }}/volumeboost.deb
+
+      - name: Clone and Build YTIconSwitcher
+        if: inputs.yticonswitcher == true && steps.cache_tweaks.outputs.cache_yticonswitcher_hit != 'true'
+        run: |
+          git clone --quiet --depth=1 https://github.com/frankfiorante/YTIconSwitcher.git
+          cd YTIconSwitcher && make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/yticonswitcher.deb
 
       - name: Upload Built Debs as Artifacts
         uses: actions/upload-artifact@v4

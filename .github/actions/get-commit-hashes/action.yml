@@ -16,8 +16,11 @@ inputs:
     default: 'false'
   volumeboost:
     required: false
-    default: 'false'  
- 
+    default: 'false'
+  yticonswitcher:
+    required: false
+    default: 'false'
+
 outputs:
   theos:
     description: Theos commit hash
@@ -93,7 +96,10 @@ outputs:
     value: ${{ steps.hashes.outputs.ythold }}
   volumeboost:
     description: VolumeBoostYT commit hash
-    value: ${{ steps.hashes.outputs.volumeboost }}  
+    value: ${{ steps.hashes.outputs.volumeboost }}
+  yticonswitcher:
+    description: YTIconSwitcher commit hash
+    value: ${{ steps.hashes.outputs.yticonswitcher }}
  
 runs:
   using: composite
@@ -155,4 +161,10 @@ runs:
           echo "volumeboost=$(get_hash VasirakCalgux/VolumeBoostYT)"                 >> $GITHUB_OUTPUT
         else
           echo "volumeboost=disabled"                                                >> $GITHUB_OUTPUT
+        fi
+
+        if [ "${{ inputs.yticonswitcher }}" = "true" ]; then
+          echo "yticonswitcher=$(get_hash frankfiorante/YTIconSwitcher)"             >> $GITHUB_OUTPUT
+        else
+          echo "yticonswitcher=disabled"                                             >> $GITHUB_OUTPUT
         fi
