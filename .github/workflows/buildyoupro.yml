@@ -129,7 +129,7 @@ jobs:
       - name: Inject Tweaks Into IPA
         run: |
           tweaks=""
-          if [ "${{ inputs.opensafari }}" = "true" ] && [ -f "OpenYouTubeSafariExtension.appex" ]; then
+          if [ "${{ inputs.opensafari }}" = "true" ] && [ -e "OpenYouTubeSafariExtension.appex" ]; then
             tweaks="OpenYouTubeSafariExtension.appex"
           fi
           for f in *.deb; do
